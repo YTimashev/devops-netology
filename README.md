@@ -1,27 +1,28 @@
 My Projekt
 
-В каталоге terraform проигнорированны файлы (terraform/.gitignore):
--Локальные директории .terraform
+В каталоге terraform проигнорированны файлы (terraform/.gitignore);
+
+-Локальные директории .terraform:
 **/.terraform/*
 
--Файлы .tfstate
+-Файлы .tfstate:
 *.tfstate
 *.tfstate.*
 
--Файлы журнала сбоев
+-Файлы журнала сбоев:
 crash.log
 crash.*.log
 
--Файлы .tfvars
+-Файлы .tfvars:
 *.tfvars
 *.tfvars.json
 
--Файлы override (переопределения)
+-Файлы override (переопределения):
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
--Файлы конфигурации
+-Файлы конфигурации:
 .terraformrc
 terraform.rc
