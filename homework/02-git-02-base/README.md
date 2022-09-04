@@ -61,3 +61,6 @@ https://www.jetbrains.com/help/pycharm/commit-and-push-changes.html – здес
 Подробней о визуальном интерфейсе будет рассказано на одной из следующих лекций.
 
 В виде результата работы по всем заданиям приложите ссылки на все три ваших репозитория в github, gitlab и bitbucket. 
+- https://github.com/YTimashev/devops-netology
+- https://gitlab.com/YTimashev/devops-netology
+- К большому сожалению зарегистрироваться на данном ресурсе не имеется возможности, по причине отказа в регистрации пользователей из России и Белоруссии!
