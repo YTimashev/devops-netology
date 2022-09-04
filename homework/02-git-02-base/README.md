@@ -39,9 +39,12 @@
 1. Создайте новую ветку `fix` базируясь на этом коммите `git switch -c fix`.
 1. Отправьте новую ветку в репозиторий на гитхабе `git push -u origin fix`.
 1. Посмотрите, как визуально выглядит ваша схема коммитов: https://github.com/YOUR_ACCOUNT/devops-netology/network. 
+![Снимок экрана от 2022-09-04 18-18-00](https://user-images.githubusercontent.com/108893621/188322432-931ec3c6-9f50-41b1-86dc-f5bfaf27baa4.png)
 1. Теперь измените содержание файла `README.md`, добавив новую строчку.
 1. Отправьте изменения в репозиторий и посмотрите, как изменится схема на странице https://github.com/YOUR_ACCOUNT/devops-netology/network 
 и как изменится вывод команды `git log`.
+![Снимок экрана от 2022-09-04 18-51-59](https://user-images.githubusercontent.com/108893621/188322443-c86e4a25-e1af-4fb4-8d9a-87dcdf633679.png)
+![Снимок экрана от 2022-09-04 18-50-30](https://user-images.githubusercontent.com/108893621/188322456-0002fac3-5ded-4ac9-bcb1-b17edc72ca1f.png)
 
 ## Задание №4 – Упрощаем себе жизнь
 
