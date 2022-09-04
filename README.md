@@ -25,3 +25,5 @@ override.tf.json
 -Файлы конфигурации
 .terraformrc
 terraform.rc
+
+-Выполнение задания Ветки (test)
