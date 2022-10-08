@@ -8,7 +8,7 @@
 Добавьте management plug-in и зайдите в веб интерфейс.
 
 *Итогом выполнения домашнего задания будет приложенный скриншот веб интерфейса RabbitMQ.*
-![Снимок экрана от 2022-10-08 22-18-58](https://user-images.githubusercontent.com/108893621/194724022-4a12ac06-5b65-4e45-b124-6fface1d71de.png)
+![Снимок экрана от 2022-10-08 22-23-28](https://user-images.githubusercontent.com/108893621/194724130-7e1000dd-7aa4-43cb-9a0e-49f4cb754af7.png)
 
 ---
 
