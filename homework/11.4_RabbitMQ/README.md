@@ -64,6 +64,10 @@ $ cat /etc/hosts
 ```shell script
 $ rabbitmqctl cluster_status
 ```
+*net1*
+
+*net-2*
+
 
 Для закрепления материала снова запустите скрипт producer.py и приложите скриншот выполнения команды на каждой из нод:
 
