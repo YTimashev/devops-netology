@@ -87,3 +87,36 @@ mysql> SELECT customer_id, LOWER(REPLACE(first_name, 'LL', 'PP')), LOWER (last_n
 4 rows in set (0,00 sec)
 ```
 
+## Дополнительные задания (со звездочкой*)
+
+### Задание 5*.
+
+Выведите Email каждого покупателя, разделив значение Email на 2 отдельных колонки: в первой колонке должно быть значение, указанное до @, во второй значение, указанное после @.
+
+```
+SELECT email,
+LOWER (SUBSTRING_INDEX(email, '@', 1)) AS email_,
+SUBSTRING_INDEX(email, '@', -1) AS _email
+FROM customer
+LIMIT 10;
+```
+```
++-------------------------------------+------------------+--------------------+
+| email                               | email_           | _email             |
++-------------------------------------+------------------+--------------------+
+| MARY.SMITH@sakilacustomer.org       | mary.smith       | sakilacustomer.org |
+| PATRICIA.JOHNSON@sakilacustomer.org | patricia.johnson | sakilacustomer.org |
+| LINDA.WILLIAMS@sakilacustomer.org   | linda.williams   | sakilacustomer.org |
+| BARBARA.JONES@sakilacustomer.org    | barbara.jones    | sakilacustomer.org |
+| ELIZABETH.BROWN@sakilacustomer.org  | elizabeth.brown  | sakilacustomer.org |
+| JENNIFER.DAVIS@sakilacustomer.org   | jennifer.davis   | sakilacustomer.org |
+| MARIA.MILLER@sakilacustomer.org     | maria.miller     | sakilacustomer.org |
+| SUSAN.WILSON@sakilacustomer.org     | susan.wilson     | sakilacustomer.org |
+| MARGARET.MOORE@sakilacustomer.org   | margaret.moore   | sakilacustomer.org |
+| DOROTHY.TAYLOR@sakilacustomer.org   | dorothy.taylor   | sakilacustomer.org |
++-------------------------------------+------------------+--------------------+
+10 rows in set (0,00 sec)
+```
+
+### Задание 6.*
+Доработайте запрос из предыдущего задания, скорректируйте значения в новых колонках: первая буква должна быть заглавной, остальные строчными.
