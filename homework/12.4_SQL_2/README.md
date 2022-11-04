@@ -1,13 +1,5 @@
 # Домашнее задание к занятию 12.4 "Реляционные базы данных: SQL. Часть 2"
 
-Домашнее задание нужно выполнить на датасете из презентации.
-
-*Решение нужно прислать одним SQL файлом, содержащим запросы по всем заданиям.*
-
-Любые вопросы по решению задач задавайте в чате учебной группы.
-
----
-
 Задание можно выполнить как в любом IDE, так и в командной строке.
 
 ### Задание 1.
@@ -16,6 +8,28 @@
 - фамилия и имя сотрудника из этого магазина,
 - город нахождения магазина,
 - количество пользователей, закрепленных в этом магазине.
+```
+SELECT 
+st.store_id AS id_store, 
+ct.city AS store_city, 
+CONCAT(s.first_name, ' ', s.last_name) AS staff_name,
+COUNT(c.store_id) AS total_customers
+FROM store st
+JOIN address ad ON ad.address_id = st.address_id
+JOIN city ct ON ct.city_id = ad.city_id
+JOIN staff s ON s.staff_id = st.store_id
+JOIN customer c ON c.store_id = st.store_id
+GROUP BY c.store_id; 
+```
+```
++----------+------------+--------------+-----------------+
+| id_store | store_city | staff_name   | total_customers |
++----------+------------+--------------+-----------------+
+|        1 | Lethbridge | Mike Hillyer |             326 |
+|        2 | Woodridge  | Jon Stephens |             273 |
++----------+------------+--------------+-----------------+
+2 rows in set (0,00 sec)
+```
 
 ### Задание 2.
 
