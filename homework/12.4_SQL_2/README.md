@@ -50,4 +50,60 @@ GROUP BY c.store_id HAVING COUNT(c.store_id) > 300;
 ### Задание 5*.
 
 Найдите фильмы, которые ни разу не брали в аренду.
-
+```
+SELECT f.title
+FROM film f
+LEFT JOIN inventory i ON i.film_id = f.film_id
+LEFT JOIN rental r ON r.inventory_id = i.inventory_id
+WHERE r.rental_id IS NULL;
+```
+```
++------------------------+
+| title                  |
++------------------------+
+| ACADEMY DINOSAUR       |
+| ALICE FANTASIA         |
+| APOLLO TEEN            |
+| ARGONAUTS TOWN         |
+| ARK RIDGEMONT          |
+| ARSENIC INDEPENDENCE   |
+| BOONDOCK BALLROOM      |
+| BUTCH PANTHER          |
+| CATCH AMISTAD          |
+| CHINATOWN GLADIATOR    |
+| CHOCOLATE DUCK         |
+| COMMANDMENTS EXPRESS   |
+| CROSSING DIVORCE       |
+| CROWDS TELEMARK        |
+| CRYSTAL BREAKING       |
+| DAZED PUNK             |
+| DELIVERANCE MULHOLLAND |
+| FIREHOUSE VIETNAM      |
+| FLOATS GARDEN          |
+| FRANKENSTEIN STRANGER  |
+| GLADIATOR WESTWARD     |
+| GUMP DATE              |
+| HATE HANDICAP          |
+| HOCUS FRIDA            |
+| KENTUCKIAN GIANT       |
+| KILL BROTHERHOOD       |
+| MUPPET MILE            |
+| ORDER BETRAYED         |
+| PEARL DESTINY          |
+| PERDITION FARGO        |
+| PSYCHO SHRUNK          |
+| RAIDERS ANTITRUST      |
+| RAINBOW SHOCK          |
+| ROOF CHAMPION          |
+| SISTER FREDDY          |
+| SKY MIRACLE            |
+| SUICIDES SILENCE       |
+| TADPOLE PARK           |
+| TREASURE COMMAND       |
+| VILLAIN DESPERATE      |
+| VOLUME HOUSE           |
+| WAKE JAWS              |
+| WALLS ARTIST           |
++------------------------+
+43 rows in set (0,03 sec)
+```
