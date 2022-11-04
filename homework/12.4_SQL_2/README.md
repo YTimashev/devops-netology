@@ -19,16 +19,15 @@ JOIN address ad ON ad.address_id = st.address_id
 JOIN city ct ON ct.city_id = ad.city_id
 JOIN staff s ON s.staff_id = st.store_id
 JOIN customer c ON c.store_id = st.store_id
-GROUP BY c.store_id; 
+GROUP BY c.store_id HAVING COUNT(c.store_id) > 300; 
 ```
 ```
 +----------+------------+--------------+-----------------+
 | id_store | store_city | staff_name   | total_customers |
 +----------+------------+--------------+-----------------+
 |        1 | Lethbridge | Mike Hillyer |             326 |
-|        2 | Woodridge  | Jon Stephens |             273 |
 +----------+------------+--------------+-----------------+
-2 rows in set (0,00 sec)
+1 row in set (0,00 sec)
 ```
 
 ### Задание 2.
