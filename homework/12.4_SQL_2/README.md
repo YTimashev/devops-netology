@@ -33,6 +33,19 @@ GROUP BY c.store_id HAVING COUNT(c.store_id) > 300;
 ### Задание 2.
 
 Получите количество фильмов, продолжительность которых больше средней продолжительности всех фильмов.
+```
+SELECT COUNT(f.film_id) AS moreAVGlength
+FROM film f
+WHERE f.length > (SELECT AVG(length) FROM film);
+```
+```
++---------------+
+| moreAVGlength |
++---------------+
+|           489 |
++---------------+
+1 row in set (0,00 sec)
+```
 
 ### Задание 3.
 
