@@ -8,7 +8,7 @@ SELECT SUM(DATA_LENGTH) AS 'DB_LENGTH_b', SUM(INDEX_LENGTH) AS INDEX_LENGTH_b, S
     FROM  INFORMATION_SCHEMA.PARTITIONS
     WHERE TABLE_SCHEMA = 'sakila';
 ```
-```
+```sql
 +-------------+----------------+------------------+
 | DB_LENGTH_b | INDEX_LENGTH_b | Percentage_index |
 +-------------+----------------+------------------+
