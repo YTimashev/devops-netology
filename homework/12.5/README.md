@@ -3,7 +3,7 @@
 ### Задание 1.
 
 Напишите запрос к учебной базе данных, который вернет процентное отношение общего размера всех индексов к общему размеру всех таблиц.
-```
+```sql
 SELECT SUM(DATA_LENGTH) AS 'DB_LENGTH_b', SUM(INDEX_LENGTH) AS INDEX_LENGTH_b, SUM(INDEX_LENGTH) / SUM(DATA_LENGTH) * 100 AS Percentage_index
     FROM  INFORMATION_SCHEMA.PARTITIONS
     WHERE TABLE_SCHEMA = 'sakila';
