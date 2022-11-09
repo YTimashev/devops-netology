@@ -8,7 +8,7 @@ SELECT SUM(DATA_LENGTH) AS 'DB_LENGTH_b', SUM(INDEX_LENGTH) AS INDEX_LENGTH_b, S
     FROM  INFORMATION_SCHEMA.PARTITIONS
     WHERE TABLE_SCHEMA = 'sakila';
 ```
-```sql
+```
 +-------------+----------------+------------------+
 | DB_LENGTH_b | INDEX_LENGTH_b | Percentage_index |
 +-------------+----------------+------------------+
@@ -25,7 +25,14 @@ from payment p, rental r, customer c, inventory i, film f
 where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id
 ```
 - перечислите узкие места,
+    - первое что бросается в глаза при анализе запроса, это опрос таблиц которые ни каким образом не влияют на выдачу, но в тоже время как я понимаю затрачиваются ресурсы на их опрос. я бы исключил из запроса таблицы  ```film```  и ```inventory```. В таблице  ```payment``` более 15 000 строк и отстутсвуют ключи (key) - добавим индекс.
 - оптимизируйте запрос (внесите корректировки по использованию операторов, при необходимости добавьте индексы).
+    - думаю конечный запрос должен выглядеть так:
+        ```sql
+        select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
+        from payment p, customer c
+        where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id;
+        ```
 
 ## Дополнительные задания (со звездочкой*)
 Эти задания дополнительные (не обязательные к выполнению) и никак не повлияют на получение вами зачета по этому домашнему заданию. Вы можете их выполнить, если хотите глубже и/или шире разобраться в материале.
