@@ -25,7 +25,7 @@ from payment p, rental r, customer c, inventory i, film f
 where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id
 ```
 - перечислите узкие места,
-    - первое что бросается в глаза при анализе запроса, это опрос таблиц которые ни каким образом не влияют на выдачу, в тоже время как я понимаю затрачиваются ресурсы на их опрос. я бы исключил из запроса таблицы  ```film```  и ```inventory```. В таблице  ```payment``` более 15 000 строк а по столбцу ```payment_date``` отстутсвуют ключи (key) - добавим функциональный индекс по ```DATE```.
+    - первое что бросается в глаза при анализе запроса, это опрос таблиц которые ни каким образом не влияют на выдачу, в тоже время как я понимаю затрачиваются ресурсы на их опрос. я бы исключил из запроса таблицы  ```film```, ```rental```  и ```inventory```. Оператор ```distinct``` может отключать индексы и лучше его убрать из запроса. В таблице  ```payment``` более 15 000 строк а по столбцу ```payment_date``` отстутсвуют ключи (key) - добавим функциональный индекс по ```DATE```.
 - оптимизируйте запрос (внесите корректировки по использованию операторов, при необходимости добавьте индексы).
     - думаю конечный запрос c добавленным индексом 
         ```sql
@@ -33,7 +33,7 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
         ```
         должен выглядеть так, где количество строк значительно сократилось:
         ```sql
-        select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
+        select concat(c.last_name, ' ', c.first_name), sum(p.amount) over (partition by c.customer_id)
         from payment p, customer c
         where date(p.payment_date) = '2005-07-30' and p.customer_id = c.customer_id;
         ```
