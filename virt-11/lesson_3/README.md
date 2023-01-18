@@ -14,7 +14,10 @@ Password:
 Login Succeeded
 ```
 
+
 - выберете любой образ, который содержит веб-сервер Nginx;
+
+```Поиск образа nginx```
 ```
 tim@tim:~$ sudo docker search nginx
 NAME                                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
@@ -23,6 +26,8 @@ bitnami/nginx                                     Bitnami nginx Docker Image    
 ubuntu/nginx                                      Nginx, a high-performance reverse proxy & we…   75                   
 ...
 ```
+
+```Скачиваем образ nginx```
 ```
 tim@tim:~$ sudo docker pull nginx
 Using default tag: latest
@@ -52,7 +57,7 @@ Hey, Netology
 </html>
 ```
 
-Dockerfile
+```Оформляем Dockerfile```
 ```
 # Dockerfile
 
@@ -67,6 +72,8 @@ COPY html/ /usr/share/nginx/html
 # открываем порты в контейнере
 EXPOSE 80
 ```
+
+```Создаем форк```
 ```
 $ docker build -t timoha1971/netnginxtest2:1 .
 ```
@@ -76,15 +83,17 @@ $ docker build -t timoha1971/netnginxtest2:1 .
 $ docker push timoha1971/netnginxtest2:1 
 ```
 
-[Ссылка на образ в репозитории DockerHub](https://hub.docker.com/layers/timoha1971/netnginxtest2/1/images/sha256-b0ad8eba353df232d5ee254c971f3620977de984cb0329c59814e919ffa599d8?context=repo)
+```Ссылка на образ в репозитории [DockerHub](https://hub.docker.com/layers/timoha1971/netnginxtest2/1/images/sha256-b0ad8eba353df232d5ee254c971f3620977de984cb0329c59814e919ffa599d8?context=repo)```
 
 
-Запускаем контейнер с пробросом на 8082 порт хоста:
+```Запускаем контейнер с пробросом на 8082 порт хоста:```
 ```
 docker run -d -p 8082:80 --name web2 timoha1971/netnginxtest2:1
 ```
 
 Открываем в браузере
+
+![Снимок экрана от 2023-01-18 21-06-57](https://user-images.githubusercontent.com/108893621/213268525-4edf057a-608f-49e6-8663-bc7eafc4f2c0.png)
 
 
 
