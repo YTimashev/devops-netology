@@ -111,10 +111,47 @@ docker run -d -p 8082:80 --name web2 timoha1971/netnginxtest2:1
 ## Задача 3
 
 - Запустите первый контейнер из образа ***centos*** c любым тэгом в фоновом режиме, подключив папку ```/data``` из текущей рабочей директории на хостовой машине в ```/data``` контейнера;
+```
+$ docker run -v /data:/data --name centosdata -d -t centos
+```
+
 - Запустите второй контейнер из образа ***debian*** в фоновом режиме, подключив папку ```/data``` из текущей рабочей директории на хостовой машине в ```/data``` контейнера;
+```
+$ docker run -v /data:/data --name ubuntudata -d -t ubuntu
+```
+
+```
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+307cda67efcc   centos    "/bin/bash"   13 minutes ago   Up 13 minutes             centosdata
+83d70d3824a4   ubuntu    "bash"        14 minutes ago   Up 14 minutes             ubuntudata
+```
+
 - Подключитесь к первому контейнеру с помощью ```docker exec``` и создайте текстовый файл любого содержания в ```/data```;
+```
+$ docker exec -it centosdata /bin/bash
+[root@307cda67efcc /]# touch /data/test_centos.txt
+[root@307cda67efcc /]# vi /data/test_centos.txt
+[root@307cda67efcc /]# exit
+exit
+```
+
 - Добавьте еще один файл в папку ```/data``` на хостовой машине;
+```
+$ sudo touch /data/host_test.txt
+$ sudo vim /data/host_test.txt
+```
+
 - Подключитесь во второй контейнер и отобразите листинг и содержание файлов в ```/data``` контейнера.
+```
+$ docker exec -it ubuntudata /bin/bash
+root@83d70d3824a4:/# ls -l /data
+total 8
+-rw-r--r-- 1 root root 14 Jan 18 20:31 host_test.txt
+-rw-r--r-- 1 root root 17 Jan 18 20:26 test_centos.txt
+```
+
+
 
 ## Задача 4 (*)
 
