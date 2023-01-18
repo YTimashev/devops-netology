@@ -46,7 +46,7 @@ docker.io/library/nginx:latest
 - создайте свой fork образа;
 - реализуйте функциональность:
 запуск веб-сервера в фоне с индекс-страницей, содержащей HTML-код ниже:
-```html
+```
 <html>
 <head>
 Hey, Netology
@@ -83,7 +83,7 @@ $ docker build -t timoha1971/netnginxtest2:1 .
 $ docker push timoha1971/netnginxtest2:1 
 ```
 
-```Ссылка на образ в репозитории [DockerHub](https://hub.docker.com/layers/timoha1971/netnginxtest2/1/images/sha256-b0ad8eba353df232d5ee254c971f3620977de984cb0329c59814e919ffa599d8?context=repo)```
+Ссылка на образ в репозитории [DockerHub](https://hub.docker.com/layers/timoha1971/netnginxtest2/1/images/sha256-b0ad8eba353df232d5ee254c971f3620977de984cb0329c59814e919ffa599d8?context=repo)
 
 
 ```Запускаем контейнер с пробросом на 8082 порт хоста:```
@@ -91,9 +91,11 @@ $ docker push timoha1971/netnginxtest2:1
 docker run -d -p 8082:80 --name web2 timoha1971/netnginxtest2:1
 ```
 
+
 Открываем в браузере
 
 ![Снимок экрана от 2023-01-18 21-06-57](https://user-images.githubusercontent.com/108893621/213268525-4edf057a-608f-49e6-8663-bc7eafc4f2c0.png)
+
 
 
 
