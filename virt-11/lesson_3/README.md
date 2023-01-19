@@ -168,7 +168,39 @@ total 8
 
 Воспроизвести практическую часть лекции самостоятельно.
 
+```Собираем из предложенного нам Dockerfile - образ, в котором будет выполняться Ansible```
+```
+$ docker build -t timoha1971/netansible2:2.10.0 .
+```
+
 Соберите Docker образ с Ansible, загрузите на Docker Hub и пришлите ссылку вместе с остальными ответами к задачам.
 
+```Выгружаем Docker-образ в публичный реестр```
+```
+$ docker login -u timoha1971
+Password: 
 
+Login Succeeded
+```
+```
+$ docker push timoha1971/netansible2:2.10.0
+The push refers to repository [docker.io/timoha1971/netansible2]
+463cd33dd141: Pushed 
+306e5055322b: Pushed 
+63493a9ab2d4: Mounted from library/alpine 
+2.10.0: digest: sha256:6ec46b46fec702ed4243695e828ad9f570810e551dd8c3a4c94b8be055c51774 size: 947
+```
+Ссылка на [образ](https://hub.docker.com/repository/docker/timoha1971/netansible2/tags?page=1&ordering=last_updated)
+```
+$ docker run timoha1971/netansible2:2.10.0
+ansible-playbook [core 2.14.1]
+  config file = None
+  configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3.9/site-packages/ansible
+  ansible collection location = /root/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible-playbook
+  python version = 3.9.16 (main, Dec 10 2022, 13:47:19) [GCC 10.3.1 20210424] (/usr/bin/python3)
+  jinja version = 3.1.2
+  libyaml = False
+  ```
 ---
