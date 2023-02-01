@@ -18,6 +18,8 @@
 ```
 docker node ls
 ```
+![Снимок экрана от 2023-01-31 21-32-37](https://user-images.githubusercontent.com/108893621/216140123-3d45bc22-8861-4fed-a214-da8225f7bb1a.png)
+
 
 ## Задача 3
 
@@ -27,6 +29,8 @@ docker node ls
 ```
 docker service ls
 ```
+![Снимок экрана от 2023-02-01 00-07-12](https://user-images.githubusercontent.com/108893621/216140021-420529a4-c1f0-470c-b2d1-75904d26c983.png)
+
 
 ## Задача 4 (*)
 
@@ -35,3 +39,5 @@ docker service ls
 # см.документацию: https://docs.docker.com/engine/swarm/swarm_manager_locking/
 docker swarm update --autolock=true
 ```
+![Снимок экрана от 2023-02-01 00-07-58](https://user-images.githubusercontent.com/108893621/216139921-5120c0d6-9cc4-4a43-8bbe-6fd0a7410573.png)
+
