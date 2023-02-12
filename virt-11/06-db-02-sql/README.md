@@ -43,34 +43,31 @@ CREATE ROLE
 ```
 
 - в БД test_db создайте таблицу orders и clients (спeцификация таблиц ниже)
-Таблица orders:
-- id (serial primary key)
-- наименование (string)
-- цена (integer)
+>Таблица orders:
+  >- id (serial primary key)
+  >- наименование (string)
+  >- цена (integer)
 ```
-test_db=# CREATE TABLE orders 
-(
+test_db=# CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     наименование varchar(200) NOT NULL,
-    цена integer
-);
+    цена integer);
 CREATE TABLE
 ```
 
-Таблица clients:
-- id (serial primary key)
-- фамилия (string)
-- страна проживания (string, index)
-- заказ (foreign key orders)
+>Таблица clients:
+  >- id (serial primary key)
+  >- фамилия (string)
+  >- страна проживания (string, index)
+  >- заказ (foreign key orders)
 ```
-test_db=# CREATE TABLE clients 
-(
+test_db=# CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     фамилия varchar(200) NOT NULL,
-    "страна проживания" varchar(200) UNIQUE,
+    "страна проживания" varchar(200),
     заказ integer,
     FOREIGN KEY (заказ) REFERENCES orders(id)
-);
+    );
 CREATE TABLE
 
 test_db=# CREATE INDEX country_index ON clients ("страна проживания");
@@ -202,6 +199,16 @@ test_db=# SELECT grantee, table_catalog, table_name, privilege_type FROM informa
 |Книга| 500 |
 |Монитор| 7000|
 |Гитара| 4000|
+```
+test_db=# INSERT INTO
+orders (наименование, цена) VALUES
+('Шоколад', 10),
+('Принтер', 3000),
+('Книга', 500),
+('Монитор', 7000),
+('Гитара', 4000);
+INSERT 0 5
+```
 
 Таблица clients
 
@@ -213,11 +220,35 @@ test_db=# SELECT grantee, table_catalog, table_name, privilege_type FROM informa
 |Ронни Джеймс Дио| Russia|
 |Ritchie Blackmore| Russia|
 
+```
+test_db=# INSERT INTO
+clients (фамилия, "страна проживания") VALUES
+('Иванов Иван Иванович', 'USA'),
+('Петров Петр Петрович', 'Canada'),
+('Иоган Себастьян Бах', 'Japan'),
+('Ронни Джеймс Дио', 'Russia'),
+('Ritchi Blackmore', 'Russia');
+INSERT 0 5
+```
+
 Используя SQL синтаксис:
 - вычислите количество записей для каждой таблицы 
 - приведите в ответе:
     - запросы 
     - результаты их выполнения.
+```
+test_db=# SELECT COUNT (*) FROM orders;
+ count 
+-------
+     5
+(1 row)
+
+test_db=# SELECT COUNT (*) FROM clients;
+ count 
+-------
+     5
+(1 row)
+```
 
 ## Задача 4
 
