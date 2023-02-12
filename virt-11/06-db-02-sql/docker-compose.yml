@@ -3,15 +3,9 @@ version: "3.9"
 services:
   postgres:
     image: postgres:12
-    container_name: my_psql
+    container_name: psql-12
     environment:
-      POSTGRES_DB: "mypsqldb"
-      POSTGRES_USER: "tim"
       POSTGRES_PASSWORD: "tim"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - ./backups/psql.$(date +%Y%m%d%H%M%S):/tmp/backup
-      - .:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: always
+      - ./backups:/tmp/backup
+      - ./pgdata:/var/lib/postgresql/data
