@@ -132,7 +132,6 @@ test_db=# \d clients
  заказ             | integer                |           |          | 
 Indexes:
     "clients_pkey" PRIMARY KEY, btree (id)
-    "clients_страна проживания_key" UNIQUE CONSTRAINT, btree ("страна проживания")
     "country_index" btree ("страна проживания")
 Foreign-key constraints:
     "clients_заказ_fkey" FOREIGN KEY ("заказ") REFERENCES orders(id)
@@ -263,9 +262,25 @@ test_db=# SELECT COUNT (*) FROM clients;
 |Иоганн Себастьян Бах| Гитара |
 
 Приведите SQL-запросы для выполнения данных операций.
+```
+test_db=# UPDATE clients SET заказ=(select id from orders where наименование='Книга') WHERE фамилия='Иванов Иван Иванович';
+UPDATE 1
+test_db=# UPDATE clients SET заказ=(select id from orders where наименование='Монитор') WHERE фамилия='Петров Петр Петрович';
+UPDATE 1
+test_db=# UPDATE clients SET заказ=(select id from orders where наименование='Гитара') WHERE фамилия='Иоган Себастьян Бах';
+UPDATE 1
+```
 
 Приведите SQL-запрос для выдачи всех пользователей, которые совершили заказ, а также вывод данного запроса.
- 
+```
+test_db=# SELECT * FROM clients WHERE заказ IS NOT NULL;
+ id |       фамилия        | страна проживания | заказ 
+----+----------------------+-------------------+-------
+  1 | Иванов Иван Иванович | USA               |     3
+  2 | Петров Петр Петрович | Canada            |     4
+  3 | Иоган Себастьян Бах  | Japan             |     5
+(3 rows)
+``` 
 Подсказк - используйте директиву `UPDATE`.
 
 ## Задача 5
