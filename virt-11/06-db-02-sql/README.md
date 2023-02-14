@@ -7,7 +7,7 @@
 
 Приведите получившуюся команду 
 ```
-$ docker run --name psql-12 -e POSTGRES_PASSWORD=tim -v "$(pwd)/pgdata":/var/lib/postgresql/data -v "$(pwd)/backups/psql.$(date +%Y%m%d%H%M%S)":/tmp/backup -d postgres:12 
+$ docker run --name psql-12 -e POSTGRES_PASSWORD=tim -v "$(pwd)/pgdata":/var/lib/postgresql/data -v "$(pwd)/backups:/tmp/backup -d postgres:12 
 ```
 
 или docker-compose манифест.
@@ -289,16 +289,45 @@ test_db=# SELECT * FROM clients WHERE заказ IS NOT NULL;
 (используя директиву EXPLAIN).
 
 Приведите получившийся результат и объясните что значат полученные значения.
+```
+test_db=# EXPLAIN SELECT * FROM clients WHERE заказ IS NOT NULL;
+                        QUERY PLAN                         
+-----------------------------------------------------------
+ Seq Scan on clients  (cost=0.00..10.90 rows=90 width=844)
+   Filter: ("заказ" IS NOT NULL)
+(2 rows)
+```
+  >Структура плана запроса представляет собой дерево узлов плана. Данный запрос считывает данные таблицы clients методом последовательного чтения/сканирования Seq Scan. Первое значение определяет приблизительные затраты, прежде чем начнется этап вывода данных. Следующее значение показывает приблизительную общую стоимость, предпологая что узел плана выполнился до конца и вернул все доступные строки. Число строк (rows), которые должен вывести узел плана. width - средний размер строк (в байтах) выводимых узлом плана. Записи сравниваются с условием S NOT NULL - при выполнении вводиться результат.
+
 
 ## Задача 6
 
 Создайте бэкап БД test_db и поместите его в volume, предназначенный для бэкапов (см. Задачу 1).
+```
+root@b3bda4696227:/# pg_dump -U tim test_db > /tmp/backup/test_db.dump
+```
 
 Остановите контейнер с PostgreSQL (но не удаляйте volumes).
+```
+root@b3bda4696227:/# exit         # выходим из контейнера
+$ docker stop psql-12             # останавливаем
+```
 
 Поднимите новый пустой контейнер с PostgreSQL.
+```
+$ docker run --name psql-12-copy -e POSTGRES_PASSWORD=tim -d postgres:12
+```
 
 Восстановите БД test_db в новом контейнере.
+```
+$ docker cp $(pwd)/backups/test_db.dump psql-12-copy:/tmp/          # копируем в новый контейнер
+
+$ docker exec -it psql-12-copy bash                                 # заходим в новый контейнер
+
+root@41954d61f884:/# createdb test_db -U postgres                   # создаем в новом контейнере базу данных
+
+root@943ab88eba5c:/# psql -U postgres test_db < /tmp/test_db.dump   # заливаем базу данных
+```
 
 Приведите список операций, который вы применяли для бэкапа данных и восстановления. 
 
