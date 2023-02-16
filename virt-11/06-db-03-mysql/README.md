@@ -25,8 +25,6 @@ services:
 $ docker-compose up -d
 ```
 
-
-
 Изучите [бэкап БД](https://github.com/netology-code/virt-homeworks/tree/virt-11/06-db-03-mysql/test_data) и 
 восстановитесь из него.
 ```
@@ -35,6 +33,7 @@ $ docker cp ./test_data/test_dump.sql mysql-8:/tmp/  # скопируем бэк
 $ docker exec -it mysql-8 /bin/bash                  # зайдем в контейнер
 
 bash-4.4# mysql -p test_db < /tmp/test_dump.sql      # востанавливаем БД
+```
 
 Перейдите в управляющую консоль `mysql` внутри контейнера.
 ```
