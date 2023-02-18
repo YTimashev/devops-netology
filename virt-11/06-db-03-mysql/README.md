@@ -160,12 +160,9 @@ mysql> SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES where USER = 'test';
 Установите профилирование `SET profiling = 1`.
 Изучите вывод профилирования команд `SHOW PROFILES;`.
 Исследуйте, какой `engine` используется в таблице БД `test_db` и **приведите в ответе**.
-```
-mysql> use test_db
-Reading table information for completion of table and column names
-You can turn off this feature to get a quicker startup with -A
 
-Database changed
+  >есть несколько способов узнать тип 'engine', самый простой на мой взгляд
+```
 mysql> SHOW CREATE TABLE orders\G;
 *************************** 1. row ***************************
        Table: orders
@@ -179,37 +176,8 @@ Create Table: CREATE TABLE `orders` (
 
 ERROR: 
 No query specified
-
 ```
-  >или так
-```
-mysql> SHOW TABLE STATUS FROM test_db LIKE 'orders'\G;
-*************************** 1. row ***************************
-           Name: orders
-         Engine: InnoDB
-        Version: 10
-     Row_format: Dynamic
-           Rows: 5
- Avg_row_length: 3276
-    Data_length: 16384
-Max_data_length: 0
-   Index_length: 0
-      Data_free: 0
- Auto_increment: 6
-    Create_time: 2023-02-16 19:27:02
-    Update_time: NULL
-     Check_time: NULL
-      Collation: utf8mb4_0900_ai_ci
-       Checksum: NULL
- Create_options: 
-        Comment: 
-1 row in set (0.04 sec)
-
-ERROR: 
-No query specified
-```
-  > есть еще несколько способов узнать тип 'engine'
-
+ 
 Измените `engine` и **приведите время выполнения и запрос на изменения из профайлера в ответе**:
 - на `MyISAM`
 ```
@@ -239,7 +207,7 @@ mysql> SHOW PROFILES;
 +----------+------------+------------------------------------+
 7 rows in set, 1 warning (0.00 sec)
 ```
-  >можно узнать подробно о на что тратилось время в каждом запросе
+  >можно узнать подробно на что тратилось время в каждом запросе
 ```
 mysql> show profile for query 6;
 +--------------------------------+----------+
@@ -278,53 +246,103 @@ mysql> show profile for query 6;
 | cleaning up                    | 0.000081 |
 +--------------------------------+----------+
 31 rows in set, 1 warning (0.00 sec)
-
-mysql> show profile for query 7;
-+--------------------------------+----------+
-| Status                         | Duration |
-+--------------------------------+----------+
-| starting                       | 0.000154 |
-| Executing hook on transaction  | 0.000015 |
-| starting                       | 0.000038 |
-| checking permissions           | 0.000014 |
-| checking permissions           | 0.000013 |
-| init                           | 0.000027 |
-| Opening tables                 | 0.000406 |
-| setup                          | 0.000129 |
-| creating table                 | 0.000249 |
-| After create                   | 0.431586 |
-| System lock                    | 0.000046 |
-| copy to tmp table              | 0.000261 |
-| rename result table            | 0.002539 |
-| waiting for handler commit     | 0.000029 |
-| waiting for handler commit     | 0.150871 |
-| waiting for handler commit     | 0.000036 |
-| waiting for handler commit     | 0.485761 |
-| waiting for handler commit     | 0.000039 |
-| waiting for handler commit     | 0.068208 |
-| waiting for handler commit     | 0.000039 |
-| waiting for handler commit     | 0.030092 |
-| end                            | 0.001316 |
-| query end                      | 0.065415 |
-| closing tables                 | 0.000045 |
-| waiting for handler commit     | 0.000076 |
-| freeing items                  | 0.000068 |
-| cleaning up                    | 0.000061 |
-+--------------------------------+----------+
-27 rows in set, 1 warning (0.00 sec)
 ```
 
 ## Задача 4 
 
 Изучите файл `my.cnf` в директории /etc/mysql.
+```
+bash-4.4# cat /etc/my.cnf
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/8.0/en/server-configuration-defaults.html
 
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+
+# Remove leading # to revert to previous value for default_authentication_plugin,
+# this will increase compatibility with older clients. For background, see:
+# https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_default_authentication_plugin
+# default-authentication-plugin=mysql_native_password
+skip-host-cache
+skip-name-resolve
+datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
+secure-file-priv=/var/lib/mysql-files
+user=mysql
+
+pid-file=/var/run/mysqld/mysqld.pid
+[client]
+socket=/var/run/mysqld/mysqld.sock
+
+!includedir /etc/mysql/conf.d/
+```
 Измените его согласно ТЗ (движок InnoDB):
-- Скорость IO важнее сохранности данных
-- Нужна компрессия таблиц для экономии места на диске
-- Размер буффера с незакомиченными транзакциями 1 Мб
-- Буффер кеширования 30% от ОЗУ
-- Размер файла логов операций 100 Мб
+- Скорость IO важнее сохранности данных - ```innodb_flush_log_at_trx_commit​ = (0, 1, 2)```
+- Нужна компрессия таблиц для экономии места на диске - ```innodb_file_format = Barracuda```
+- Размер буффера с незакомиченными транзакциями 1 Мб - ```innodb_log​_buffer_size​ = 1M```
+- Буффер кеширования 30% от ОЗУ - ```innodb_buffer_pool_size = 300M```
+- Размер файла логов операций 100 Мб - ```innodb_log_file_size​ = 100M```
 
 Приведите в ответе измененный файл `my.cnf`.
+```
+bash-4.4# cat /etc/my.cnf
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/8.0/en/server-configuration-defaults.html
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+
+# Remove leading # to revert to previous value for default_authentication_plugin,
+# this will increase compatibility with older clients. For background, see:
+# https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_default_authentication_plugin
+# default-authentication-plugin=mysql_native_password
+skip-host-cache
+skip-name-resolve
+datadir=/var/lib/mysql
+socket=/var/run/mysqld/mysqld.sock
+secure-file-priv=/var/lib/mysql-files
+user=mysql
+
+pid-file=/var/run/mysqld/mysqld.pid
+
+# Изменения согласно ТЗ (движок InnoDB)
+innodb_flush_log_at_trx_commit​ = 0
+innodb_file_format = Barracuda
+innodb_log​_buffer_size​ = 1M
+innodb_buffer_pool_size = 300M
+innodb_log_file_size​ = 100M
+
+[client]
+socket=/var/run/mysqld/mysqld.sock
+
+!includedir /etc/mysql/conf.d/
 
 ---
