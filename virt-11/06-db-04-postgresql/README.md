@@ -48,25 +48,110 @@ postgres=# \c postgres
 You are now connected to database "postgres" as user "postgres".
 ```
 - вывода списка таблиц - ```\dt[S+] [PATTERN]     # list tables```
+```
+postgres=# \dtS
+                    List of relations
+   Schema   |          Name           | Type  |  Owner   
+------------+-------------------------+-------+----------
+ pg_catalog | pg_aggregate            | table | postgres
+ pg_catalog | pg_am                   | table | postgres
+ pg_catalog | pg_amop                 | table | postgres
+ pg_catalog | pg_amproc               | table | postgres
+ ...
+```
 
 - вывода описания содержимого таблиц - ```\d[S+]  NAME     # describe table, view, sequence, or index```
+```
+postgres=# \dS+ pg_am
+                                  Table "pg_catalog.pg_am"
+  Column   |  Type   | Collation | Nullable | Default | Storage | Stats target | Description 
+-----------+---------+-----------+----------+---------+---------+--------------+-------------
+ oid       | oid     |           | not null |         | plain   |              | 
+ amname    | name    |           | not null |         | plain   |              | 
+ amhandler | regproc |           | not null |         | plain   |              | 
+ amtype    | "char"  |           | not null |         | plain   |              | 
+Indexes:
+    "pg_am_name_index" UNIQUE, btree (amname)
+    "pg_am_oid_index" UNIQUE, btree (oid)
+Access method: heap
+```
 
 - выхода из psql - ```\q    # quit psql```
 
 ## Задача 2
 
 Используя `psql` создайте БД `test_database`.
+```
+postgres=# CREATE DATABASE test_database;
+CREATE DATABASE
+```
 
 Изучите [бэкап БД](https://github.com/netology-code/virt-homeworks/tree/virt-11/06-db-04-postgresql/test_data).
 
 Восстановите бэкап БД в `test_database`.
+```
+$ docker cp ./backups/test_dump.sql psql-13:/tmp                          # копируем файл дампа в контейнер
 
+$ docker exec -it psql-13 bash                                            # заходим в контейнер
+
+root@20c2f2f216d3:/# psql -U postgres test_database < /tmp/test_dump.sql  # заливаем БД
+SET
+SET
+SET
+SET
+SET
+ set_config 
+------------
+ 
+(1 row)
+
+SET
+SET
+SET
+SET
+SET
+SET
+CREATE TABLE
+ALTER TABLE
+CREATE SEQUENCE
+ALTER TABLE
+ALTER SEQUENCE
+ALTER TABLE
+COPY 8
+ setval 
+--------
+      8
+(1 row)
+
+ALTER TABLE
+```
 Перейдите в управляющую консоль `psql` внутри контейнера.
-
+```
+root@20c2f2f216d3:/# psql -U postgres
+psql (13.10 (Debian 13.10-1.pgdg110+1))
+Type "help" for help.
+```
 Подключитесь к восстановленной БД и проведите операцию ANALYZE для сбора статистики по таблице.
+```
+postgres=# \c test_database
+You are now connected to database "test_database" as user "postgres".
 
+test_database=# ANALYZE VERBOSE orders;
+INFO:  analyzing "public.orders"
+INFO:  "orders": scanned 1 of 1 pages, containing 8 live rows and 0 dead rows; 8 rows in sample, 8 estimated total rows
+ANALYZE
+```
 Используя таблицу [pg_stats](https://postgrespro.ru/docs/postgresql/12/view-pg-stats), найдите столбец таблицы `orders` 
 с наибольшим средним значением размера элементов в байтах.
+```
+test_database=# SELECT attname, avg_width FROM pg_stats WHERE tablename='orders';
+ attname | avg_width 
+---------+-----------
+ id      |         4
+ title   |        16
+ price   |         4
+(3 rows)
+```
 
 **Приведите в ответе** команду, которую вы использовали для вычисления и полученный результат.
 
