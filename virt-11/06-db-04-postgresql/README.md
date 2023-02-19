@@ -164,13 +164,13 @@ test_database=# SELECT attname, avg_width FROM pg_stats WHERE tablename='orders'
 Предложите SQL-транзакцию для проведения данной операции.
 ```
 BEGIN;                                                           # открываем транзакцию
-CREATE TABLE orders_1 (LIKE orders);                             # Создаем таблицу ```orders_1``` со структурой таблицы ```orders```
-INSERT INTO orders_1 SELECT * FROM orders WHERE price >499;      # Вставлем в таблицу ```orders_1``` из таблицы ```orders``` столбца/колонки ```price``` значения ```>499```
-DELETE FROM orders WHERE price >499;                             # Удаляем из таблицы ```orders``` столбца/колонки ```price``` значения ```>499```
+CREATE TABLE orders_1 (LIKE orders);                             # Создаем таблицу orders_1 со структурой таблицы orders
+INSERT INTO orders_1 SELECT * FROM orders WHERE price >499;      # Вставлем в таблицу orders_1 из таблицы orders столбца/колонки price значения >499
+DELETE FROM orders WHERE price >499;                             # Удаляем из таблицы orders столбца/колонки price значения >499
 
-CREATE TABLE orders_2 (LIKE orders);                             # Создаем таблицу ```orders_2``` со структурой таблицы ```orders```
-INSERT INTO orders_2 SELECT * FROM orders WHERE price <=499;     # Вставлем в таблицу ```orders_2``` из таблицы ```orders``` столбца/колонки ```price``` значения ```<=499```
-DELETE FROM orders WHERE price <=499;                            # Удаляем из таблицы ```orders``` столбца/колонки ```price``` значения ```<=499```
+CREATE TABLE orders_2 (LIKE orders);                             # Создаем таблицу orders_2 со структурой таблицы orders
+INSERT INTO orders_2 SELECT * FROM orders WHERE price <=499;     # Вставлем в таблицу orders_2 из таблицы orders столбца/колонки price значения <=499
+DELETE FROM orders WHERE price <=499;                            # Удаляем из таблицы orders столбца/колонки price значения <=499
 COMMIT;                                                          # Закрываем транзакцию
 ```
 ```
