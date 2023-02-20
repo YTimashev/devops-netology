@@ -204,7 +204,12 @@ test_database=# select * from orders;
 ## Задача 4
 
 Используя утилиту `pg_dump` создайте бекап БД `test_database`.
-
+```
+pg_dump -U postgres -d test_database > /tmp/test_db.sql
+```
 Как бы вы доработали бэкап-файл, чтобы добавить уникальность значения столбца `title` для таблиц `test_database`?
-
+  >Первое что приходит на ум, это взять и добавить ограничение `UNIQUE` на столбец/поле `title` таблицы `orders` в бэкап файле - но думаю это не верное решение. Правильно как мне кажеться добавить уникальный индекс в таблицу  `orders` полю `title`
+```
+# CREATE UNIQUE INDEX title_unique_index ON public.orders USING btree (title);
+```
 ---
