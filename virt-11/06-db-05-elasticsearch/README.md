@@ -20,7 +20,7 @@
 
 В ответе приведите:
 - текст Dockerfile манифеста
-```yml
+```dockerfile
 FROM centos:7
 
 ENV PATH=/usr/lib:/usr/lib/jvm/jre-11/bin:$PATH
@@ -59,13 +59,14 @@ $ docker build -t timoha1971/esc:7 .
 $ docker push timoha1971/esc:7
 
 $ docker run --rm -d --name esc7 -p 9200:9200 timoha1971/esc:7
+
+$ curl -X GET 'http://localhost:9200/'
 ```
 - ссылку на образ в репозитории dockerhub
   >[Ссылка на образ в](https://hub.docker.com/repository/docker/timoha1971/esc/general)
 
 - ответ `elasticsearch` на запрос пути `/` в json виде
 ```json
-$ curl -X GET 'http://localhost:9200/'
 {
   "name" : "netology_test",
   "cluster_name" : "docker_cluster",
