@@ -109,12 +109,11 @@ $ curl -X GET 'http://localhost:9200/'
 | ind-2 | 1 | 2 |
 | ind-3 | 2 | 4 |
 
-  >Пример добавления индексов
 ```bash
 $ curl -X PUT "localhost:9200/ind-1" -H 'Content-Type: application/json' -d'
 ```
 ```json
-> {
+{
     "settings": {
         "index": {
             "number_of_shards": 1,
@@ -124,10 +123,13 @@ $ curl -X PUT "localhost:9200/ind-1" -H 'Content-Type: application/json' -d'
 }
 '
 ```
-  >Ответ на создание индекса
+  >Пример добавления индексов
+
 ```json
 {"acknowledged":true,"shards_acknowledged":true,"index":"ind-1"}
 ```
+  >Ответ на создание индекса
+  
 Получите список индексов и их статусов, используя API и **приведите в ответе** на задание.
 ```bash
 $ curl -X GET "localhost:9200/_cat/indices/ind-*?v=true&s=index&pretty"
