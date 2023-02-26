@@ -111,8 +111,6 @@ $ curl -X GET 'http://localhost:9200/'
 
 ```bash
 $ curl -X PUT "localhost:9200/ind-1" -H 'Content-Type: application/json' -d'
-```
-```json
 {
     "settings": {
         "index": {
