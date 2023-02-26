@@ -19,6 +19,7 @@ ADD elasticsearch.yml /elasticsearch-7.14.0/config/
 
 ENV ES_JAVA_HOME=/elasticsearch-7.14.0/jdk/
 ENV ES_HOME=/elasticsearch-7.14.0
+
 RUN groupadd elastic && useradd -g elastic elastic
 
 RUN mkdir /var/lib/logs && \
@@ -27,8 +28,8 @@ RUN mkdir /var/lib/logs && \
     chown elastic:elastic /var/lib/data && \
     chown -R elastic:elastic /elasticsearch-7.14.0/
 
-#RUN mkdir /elasticsearch-7.14.0/snapshots && \
-#    chown elastic:elastic /elasticsearch-7.14.0/snapshots
+#RUN mkdir /elasticsearch-7.14.0/snapshots &&\
+#    chown -R elastic:elastic /elasticsearch-7.14.0/snapshots
 
 USER elastic
 CMD ["/elasticsearch-7.14.0/bin/elasticsearch"]

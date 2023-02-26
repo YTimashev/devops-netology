@@ -48,7 +48,7 @@ RUN mkdir /var/lib/logs && \
     chown elastic:elastic /var/lib/logs && \
     mkdir /var/lib/data && \
     chown elastic:elastic /var/lib/data && \
-    chown -R elastic:elastic /elasticsearch-7.14.0/
+    chown -R elastic:elastic /elasticsearch-7.14.0
 
 USER elastic
 CMD ["/elasticsearch-7.14.0/bin/elasticsearch"]
@@ -129,7 +129,7 @@ $ curl -X PUT "localhost:9200/ind-1" -H 'Content-Type: application/json' -d'
 {"acknowledged":true,"shards_acknowledged":true,"index":"ind-1"}
 ```
   >Ответ на создание индекса
-  
+
 Получите список индексов и их статусов, используя API и **приведите в ответе** на задание.
 ```bash
 $ curl -X GET "localhost:9200/_cat/indices/ind-*?v=true&s=index&pretty"
@@ -180,25 +180,158 @@ $ curl -X DELETE localhost:9200/ind-1 localhost:9200/ind-2 localhost:9200/ind-3
 - восстанавливать индексы из бэкапов
 
 Создайте директорию `{путь до корневой директории с elasticsearch в образе}/snapshots`.
-
+```bash
+$ docker exec -ti esc /bin/bash
+[elastic@bc5196192096 /]$ mkdir elasticsearch-7.14.0/snapshots
+[elastic@8eb44dd7b620 /]$ vi elasticsearch-7.14.0/config/elasticsearch.yml # добавляем в файл строку: "path.repo: /elasticsearch-7.14.0/snapshots"
+[elastic@8eb44dd7b620 /]$ exit
+$ docker restart esc 
+```
 Используя API [зарегистрируйте](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-register-repository) 
 данную директорию как `snapshot repository` c именем `netology_backup`.
 
 **Приведите в ответе** запрос API и результат вызова API для создания репозитория.
+```bash
+$ curl -X PUT "localhost:9200/_snapshot/netology_backup?pretty" -H 'Content-Type: application/json' -d'
+{
+  "type": "fs",
+  "settings": {
+    "location": "/elasticsearch-7.14.0/snapshots"
+  }
+}
+'
+```
+  >Запрос
+```json
+{
+  "acknowledged" : true
+}
+```
+  >результат вызова
 
 Создайте индекс `test` с 0 реплик и 1 шардом и **приведите в ответе** список индексов.
-
+```bash
+$ curl -X PUT "localhost:9200/test" -H 'Content-Type: application/json' -d'
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    }
+}
+'
+```
+```json
+{"acknowledged":true,"shards_acknowledged":true,"index":"test"}
+```
+```bash
+$ curl -X GET "localhost:9200/_cat/indices/test?v=true&s=index&pretty"
+health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   test  PT4WyeF_R4mr2Pz4AGTPwg   1   0          0            0       208b           208b
+```
 [Создайте `snapshot`](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-take-snapshot.html) 
 состояния кластера `elasticsearch`.
-
+```bash
+curl -X PUT "localhost:9200/_snapshot/netology_backup/my_snapshot?wait_for_completion=true&pretty"
+```
+```json
+{
+  "snapshot" : {
+    "snapshot" : "my_snapshot",
+    "uuid" : "-zhGEU3vQGC7aDrQNq1aWw",
+    "repository" : "netology_backup",
+    "version_id" : 7140099,
+    "version" : "7.14.0",
+    "indices" : [
+      ".geoip_databases",
+      "test"
+    ],
+    "data_streams" : [ ],
+    "include_global_state" : true,
+    "state" : "SUCCESS",
+    "start_time" : "2023-02-26T17:55:28.482Z",
+    "start_time_in_millis" : 1677434128482,
+    "end_time" : "2023-02-26T17:55:30.484Z",
+    "end_time_in_millis" : 1677434130484,
+    "duration_in_millis" : 2002,
+    "failures" : [ ],
+    "shards" : {
+      "total" : 2,
+      "failed" : 0,
+      "successful" : 2
+    },
+    "feature_states" : [
+      {
+        "feature_name" : "geoip",
+        "indices" : [
+          ".geoip_databases"
+        ]
+      }
+    ]
+  }
+}
+```
 **Приведите в ответе** список файлов в директории со `snapshot`ами.
-
+```bash
+$ docker exec -ti esc /bin/bash
+[elastic@8eb44dd7b620 /]$ ls -lah elasticsearch-7.14.0/snapshots/
+total 56K
+drwxrwxr-x 3 elastic elastic 4.0K Feb 26 17:55 .
+drwxr-xr-x 1 elastic elastic 4.0K Feb 26 16:51 ..
+-rw-r--r-- 1 elastic elastic  829 Feb 26 17:55 index-0
+-rw-r--r-- 1 elastic elastic    8 Feb 26 17:55 index.latest
+drwxr-xr-x 4 elastic elastic 4.0K Feb 26 17:55 indices
+-rw-r--r-- 1 elastic elastic  28K Feb 26 17:55 meta--zhGEU3vQGC7aDrQNq1aWw.dat
+-rw-r--r-- 1 elastic elastic  438 Feb 26 17:55 snap--zhGEU3vQGC7aDrQNq1aWw.dat
+```
 Удалите индекс `test` и создайте индекс `test-2`. **Приведите в ответе** список индексов.
+```bash
+[elastic@8eb44dd7b620 /]$ exit
+exit
 
+$ curl -X DELETE localhost:9200/test
+{"acknowledged":true}
+
+$ curl -X PUT "localhost:9200/test-2" -H 'Content-Type: application/json' -d'
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    }
+}
+'
+{"acknowledged":true,"shards_acknowledged":true,"index":"test-2"}
+```
+```bash
+$ curl -X GET "localhost:9200/_cat/indices/test*?v=true&s=index&pretty"
+health status index  uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   test-2 ZjZvZ6TrRam3Y2MXfHR0mA   1   0          0            0       208b           208b
+```
 [Восстановите](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-restore-snapshot.html) состояние
 кластера `elasticsearch` из `snapshot`, созданного ранее. 
-
 **Приведите в ответе** запрос к API восстановления и итоговый список индексов.
+```bush
+$ curl -X POST "localhost:9200/_snapshot/netology_backup/my_snapshot/_restore?pretty" -H 'Content-Type: application/json' -d'
+{
+  "indices": "*",
+  "include_global_state": true
+}
+'
+```
+```json
+{
+  "accepted" : true
+}
+```
+```bash
+$ curl -X GET "localhost:9200/_cat/indices/test*?v=true&s=index&pretty"
+health status index  uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   test   VfEjyL8lT8uWNutHV1IV_Q   1   0          0            0       208b           208b
+green  open   test-2 ZjZvZ6TrRam3Y2MXfHR0mA   1   0          0            0       208b           208b
+```
 
 Подсказки:
 - возможно вам понадобится доработать `elasticsearch.yml` в части директивы `path.repo` и перезапустить `elasticsearch`
