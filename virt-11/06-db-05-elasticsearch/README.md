@@ -85,7 +85,6 @@ $ curl -X GET 'http://localhost:9200/'
   "tagline" : "You Know, for Search"
 }
 ```
-
 Подсказки:
 - возможно вам понадобится установка пакета perl-Digest-SHA для корректной работы пакета shasum
 - при сетевых проблемах внимательно изучите кластерные и сетевые настройки в elasticsearch.yml
@@ -110,16 +109,65 @@ $ curl -X GET 'http://localhost:9200/'
 | ind-2 | 1 | 2 |
 | ind-3 | 2 | 4 |
 
+  >Пример добавления индексов
+```bash
+$ curl -X PUT "localhost:9200/ind-1" -H 'Content-Type: application/json' -d'
+```
+```json
+> {
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    }
+}
+'
+```
+  >Ответ на создание индекса
+```json
+{"acknowledged":true,"shards_acknowledged":true,"index":"ind-1"}
+```
 Получите список индексов и их статусов, используя API и **приведите в ответе** на задание.
-
+```bash
+$ curl -X GET "localhost:9200/_cat/indices/ind-*?v=true&s=index&pretty"
+health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   ind-1 OrPel7eSThq5eDibsbRIvw   1   0          0            0       208b           208b
+yellow open   ind-2 sB-2ZqL9QI6-y4KMJxkjgQ   2   1          0            0       416b           416b
+yellow open   ind-3 PU3wcARWSU6hGFxekxJVFw   4   2          0            0       832b           832b
+```
 Получите состояние кластера `elasticsearch`, используя API.
-
+```bash
+$ curl -X GET "localhost:9200/_cluster/health?pretty"
+```
+```json
+{
+  "cluster_name" : "docker_cluster",
+  "status" : "yellow",
+  "timed_out" : false,
+  "number_of_nodes" : 1,
+  "number_of_data_nodes" : 1,
+  "active_primary_shards" : 8,
+  "active_shards" : 8,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 10,
+  "delayed_unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0,
+  "number_of_in_flight_fetch" : 0,
+  "task_max_waiting_in_queue_millis" : 0,
+  "active_shards_percent_as_number" : 44.44444444444444
+}
+```
 Как вы думаете, почему часть индексов и кластер находится в состоянии yellow?
+  >В лекции было четко акцентировано внимание что, состояние Yellow у индексов по причине наличия в кластере всего одной ноды в сравнение с количеством реплик.
 
 Удалите все индексы.
-
+```bash
+$ curl -X DELETE localhost:9200/ind-1 localhost:9200/ind-2 localhost:9200/ind-3
+{"acknowledged":true}{"acknowledged":true}{"acknowledged":true}
+```
 **Важно**
-
 При проектировании кластера elasticsearch нужно корректно рассчитывать количество реплик и шард,
 иначе возможна потеря данных индексов, вплоть до полной, при деградации системы.
 
