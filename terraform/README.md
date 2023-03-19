@@ -124,18 +124,17 @@ Terraform used the selected providers to generate the following execution plan. 
 
 Terraform will perform the following actions:
 
-  # virtualbox_vm.vm2 will be created
-  + resource "virtualbox_vm" "vm2" {
+  # virtualbox_vm.vm1 will be created
+  + resource "virtualbox_vm" "vm1" {
       + cpus   = 1
       + id     = (known after apply)
-      + image  = "https://app.vagrantup.com/shekeriev/boxes/debian-11/versions/0.2/providers/virtualbox.box"
+      + image  = "https://app.vagrantup.com/shekeriev/boxes/centos-8-minimal/versions/0.3/providers/virtualbox.box"
       + memory = "512 mib"
-      + name   = "debian-11"
+      + name   = "centos-8"
       + status = "running"
 
       + network_adapter {
           + device                 = "IntelPro1000MTServer"
-          + host_interface         = "vboxnet2"
           + ipv4_address           = (known after apply)
           + ipv4_address_available = (known after apply)
           + mac_address            = (known after apply)
@@ -145,9 +144,6 @@ Terraform will perform the following actions:
     }
 
 Plan: 1 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + IPAddress = (known after apply)
 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
