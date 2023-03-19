@@ -10,16 +10,14 @@
 ### Чеклист готовности к домашнему заданию
 
 1. Скачайте и установите актуальную версию **terraform**(не менее 1.3.7). Приложите скриншот вывода команды ```terraform --version```
-2. Скачайте на свой ПК данный git репозиторий. Исходный код для выполнения задания расположен в директории **01/src**.
-3. Убедитесь, что в вашей ОС установлен docker
-```bash
-tim@tim:~/git/devops-netology/terraform$ terraform --version
-Terraform v1.3.7
-on linux_amd64
+![Снимок экрана от 2023-03-19 12-35-27](https://user-images.githubusercontent.com/108893621/226166894-884a4ea8-79c7-445c-b100-4862357d7688.png)
 
-tim@tim:~/git/devops-netology/terraform$ docker --version
-Docker version 20.10.22, build 3a2c30b
-```
+2. Скачайте на свой ПК данный git репозиторий. Исходный код для выполнения задания расположен в директории **01/src**.
+![Снимок экрана от 2023-03-19 12-37-53](https://user-images.githubusercontent.com/108893621/226166876-0c7135a3-ff26-4ab7-9865-53991fcc7ecb.png)
+
+3. Убедитесь, что в вашей ОС установлен docker
+![Снимок экрана от 2023-03-19 12-38-11](https://user-images.githubusercontent.com/108893621/226166845-31ab99bd-e770-43ab-ae59-235e38c9c665.png)
+
 
 ------
 
