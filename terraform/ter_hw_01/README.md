@@ -54,11 +54,7 @@ Docker version 20.10.22, build 3a2c30b
 > во второй ошибке опять же проблемы из за неверного имени ресурса ```resource "docker_container" "1nginx"``` , имя должно начинаться с буквы или подчеркивания
    
 >Код с учетом исправлений:
-<<<<<<< HEAD:terraform/README.md
 ```
-=======
-```json
->>>>>>> d7770c1 (ter_hw_01v1):terraform/ter_hw_01/README.md
 resource "docker_image" "nginx" {
   name         = "nginx:latest"
   keep_locally = true
