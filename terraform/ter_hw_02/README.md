@@ -70,7 +70,7 @@ variable "vm_web_image" {
 ###yandex_compute_instance
 variable "vm_web_instance" {
   type        = string
-  default     = "netology-develop-platform-db"
+  default     = "netology-develop-platform-web"
   description = "name web instance"
 }
 
@@ -117,7 +117,7 @@ variable "vm_db_image" {
 ###yandex_compute_instance
 variable "vm_db_instance" {
   type        = string
-  default     = "netology-develop-platform-web"
+  default     = "netology-develop-platform-db"
   description = "name web instance"
 }
 
