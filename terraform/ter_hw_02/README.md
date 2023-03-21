@@ -136,10 +136,32 @@ Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 ### Задание 4
 
 1. Объявите в файле outputs.tf отдельные output, для каждой из ВМ с ее внешним IP адресом.
-2. Примените изменения.
+```
+output "ip_address_web" {
+  value = yandex_compute_instance.platform.network_interface.0.ip_address
+}
+
+output "ip_address_db" {
+  value = yandex_compute_instance.platform2.network_interface.0.ip_address
+}
+```
+
+3. Примените изменения.
+```
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+ip_address_db = "10.0.1.4"
+ip_address_web = "10.0.1.6"
+```
 
 В качестве решения приложите вывод значений ip-адресов команды ```terraform output```
-
+```
+$ terraform output
+ip_address_db = "10.0.1.4"
+ip_address_web = "10.0.1.6"
+```
 
 ### Задание 5
 
