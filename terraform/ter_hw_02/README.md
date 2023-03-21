@@ -47,8 +47,43 @@ https://console.cloud.yandex.ru/folders/<ваш cloud_id>/vpc/security-groups
 
 1. Изучите файлы проекта.
 2. Замените все "хардкод" **значения** для ресурсов **yandex_compute_image** и **yandex_compute_instance** на **отдельные** переменные. К названиям переменных ВМ добавьте в начало префикс **vm_web_** .  Пример: **vm_web_name**.
-2. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
-3. Проверьте terraform plan (изменений быть не должно). 
+```json
+data "yandex_compute_image" "ubuntu" {
+  family = var.vm_web_image
+}
+resource "yandex_compute_instance" "platform" {
+  name        = var.vm_web_instance
+  platform_id = var.vm_web_platform
+```
+
+4. Объявите нужные переменные в файле variables.tf, обязательно указывайте тип переменной. Заполните их **default** прежними значениями из main.tf. 
+```json
+###yandex_compute_image
+
+variable "vm_web_image" {
+  type        = string
+  default     = "ubuntu-2004-lts"
+  description = "name web image"
+}
+
+###yandex_compute_instance
+variable "vm_web_instance" {
+  type        = string
+  default     = "netology-develop-platform-web"
+  description = "name web instance"
+}
+
+variable "vm_web_platform" {
+  type        = string
+  default     = "standard-v1"
+  description = "yandex platform id"
+}
+```
+
+6. Проверьте terraform plan (изменений быть не должно). 
+```
+Plan: 3 to add, 0 to change, 0 to destroy.
+```
 
 
 ### Задание 3
